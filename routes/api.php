@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TodoController;
+use App\Http\Controllers\Api\ApiController;
 
 
 /*
@@ -15,6 +16,13 @@ use App\Http\Controllers\TodoController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
+//Register
+Route::post("/register",[ApiController::class,"/register"]);
+
+//Login
+Route::post("login",[ApiController::class,"login"]);
 
 Route::apiResource('todos', TodoController::class);
 
