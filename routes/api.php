@@ -6,6 +6,7 @@ use App\Http\Controllers\TodoController;
 use App\Http\Controllers\Api\ApiController;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,6 +28,8 @@ Route::post("login",[ApiController::class,"login"]);
 //Logout
 Route::post("logout",[ApiController::class,"logout"]);
 
-Route::apiResource('todos', TodoController::class);
+Route::apiResource('todo', TodoController::class);
+
+
 
 

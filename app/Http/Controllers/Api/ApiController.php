@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterStoreRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use illuminate\Support\Facades\Auth;
@@ -13,23 +14,8 @@ use illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
 {
-    public function register (Request $request)
+    public function register (RegisterStoreRequest $request)
     {
-        $validateUser = Validator::make ($request->all(),
-        [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required',
-        ]);
-
-        if($validateUser->fails()){
-            return response()->json([
-                'status' => false,
-                'message' =>'validation error',
-                'errors' =>$validateUser->errors()
-            ],401);
-        }
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -43,23 +29,11 @@ class ApiController extends Controller
         ],200);
     }
 
-    public function login (Request $request)
+    public function login (RegisterStoreRequest $request)
     {
-        $validateUser = Validator::make($request->all(),
-        [
-            'email' => 'required||email',
-            'password' => 'required',
-        ]);
 
-        if($validateUser->fails()){
-            return response()->json([
-                'status' => false,
-                'message' =>'validation error',
-                'errors' =>$validateUser->errors()
-            ],401);
-        }
 
-        if(!Auth::attempt($request->only(['email', 'password']))){
+       if(!Auth::attempt($request->only(['email', 'password']))){
             return response()->json([
                 'status' => false,
                 'message' =>'Email and Password does not match with record'
@@ -70,18 +44,18 @@ class ApiController extends Controller
         return response()->json([
             'status' => true,
             'message' =>'USer Logged in successfully',
-            'token' => $user->createToken("API Token")->plainTexttoken
+            'token' => $user->createToken("API Token")->plainTextToken
         ],200);
 
     }
 
-    public function logout(){
-        auth()->user()->tokens()->delete();
+    public function logout(Request $request){
+        $request()->user()->tokens()->delete();
         return response()->json([
             'status' => true,
             'message' => 'User logged out successfully',
-            'data' =>[],
-        ],200);
+            'data' => [],
+        ], 200);
     }
-        
+
 }
